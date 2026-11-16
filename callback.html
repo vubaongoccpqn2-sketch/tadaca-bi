@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TikTok Authorization – TADACA BI</title><link rel="stylesheet" href="style.css"></head><body>
+<h1>TikTok authorization</h1>
+<div id="out">Processing…</div>
+<script>
+// Optional: set to the Apps Script Web App URL to forward the code automatically.
+var APPS_SCRIPT_URL = "";
+var p = new URLSearchParams(location.search);
+var code = p.get("code"), err = p.get("error");
+var out = document.getElementById("out");
+if (err) {
+  out.textContent = "Authorization failed: " + err + " " + (p.get("error_description") || "");
+} else if (code) {
+  if (APPS_SCRIPT_URL) {
+    location.replace(APPS_SCRIPT_URL + "?code=" + encodeURIComponent(code) + "&state=" + encodeURIComponent(p.get("state") || ""));
+  } else {
+    out.innerHTML = "<p>Authorization code received. Copy it into Apps Script (valid for a few minutes):</p><textarea readonly id='c'></textarea>";
+    document.getElementById("c").value = code;
+  }
+} else {
+  out.textContent = "No authorization code found.";
+}
+</script>
+</body></html>
